@@ -2,10 +2,6 @@ package stream.app
 
 
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
-import kafka.common.TopicAndPartition
-import kafka.message.MessageAndMetadata
-import kafka.serializer.StringDecoder
-import kafka.utils.ZKStringSerializer
 import org.I0Itec.zkclient.ZkClient
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
