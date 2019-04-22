@@ -18,7 +18,7 @@ import utils.{KafkaOffsetManager, PropertiesUtil}
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
-import scala.tools.nsc.interpreter.InputStream
+
 
 object CustomDirectKafkaExample {
   val logger = LoggerFactory.getLogger(CustomDirectKafkaExample.getClass)
@@ -77,18 +77,20 @@ object CustomDirectKafkaExample {
     val kafkaStream = zkOffsetDate match {
       case None =>
         logger.info("系统第一次启动，没有读取到偏移量，默认从最新的offset开始消费")
-        KafkaUtils.createDirectStream[String, String](ssc, PreferConsistent, Subscribe[String, String](topics, kafkaParams))
+        KafkaUtils.createDirectStream[String, String](ssc,
+          PreferConsistent, Subscribe[String, String](topics, kafkaParams))
       case Some(lastStopOffset) =>
         logger.info("从zk中读取到偏移量，从上次的偏移量开始消费数据........")
         val topicPartition = new TopicPartition(topics.last, lastStopOffset.last._1.partition)
-        val ss = Map[TopicPartition, Long](
+        val offset = Map[TopicPartition, Long](
           topicPartition -> lastStopOffset.last._2
         )
 
         // val messageHandler = (mmd: MessageAndMetadata[String, String]) =>(mmd.key, mmd.message())
         //使用上次停止时候的偏移量创建DirectStream
 
-        KafkaUtils.createDirectStream(ssc, PreferConsistent, Subscribe[String, String](topics, kafkaParams, ss))
+        KafkaUtils.createDirectStream(ssc,
+          PreferConsistent, Subscribe[String, String](topics, kafkaParams, offset))
     }
     kafkaStream
   }

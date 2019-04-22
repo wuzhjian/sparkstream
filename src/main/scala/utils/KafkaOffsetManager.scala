@@ -5,9 +5,9 @@ import kafka.common.TopicAndPartition
 import kafka.utils.ZkUtils
 import org.I0Itec.zkclient.ZkClient
 import org.apache.spark.rdd.RDD
-import org.apache.spark.streaming.kafka.HasOffsetRanges
 import org.apache.spark.streaming.kafka010.HasOffsetRanges
 import org.slf4j.LoggerFactory
+import scala.collection.JavaConversions._
 
 object KafkaOffsetManager {
   val logger = LoggerFactory.getLogger(KafkaOffsetManager.getClass)
